@@ -1,0 +1,76 @@
+{
+ "duration": 20.48,
+ "blocks": [
+  {
+   "id": "home-c01-01",
+   "start": 0.0,
+   "end": 1.149,
+   "sentences": [
+    {
+     "i": 0,
+     "start": 0.0,
+     "end": 1.149,
+     "tts": "Paper Aviation."
+    }
+   ]
+  },
+  {
+   "id": "home-c01-02",
+   "start": 1.591,
+   "end": 9.218,
+   "sentences": [
+    {
+     "i": 0,
+     "start": 1.591,
+     "end": 5.886,
+     "tts": "The serious professional's guide to folding a paper airplane that actually flies."
+    },
+    {
+     "i": 1,
+     "start": 6.583,
+     "end": 9.218,
+     "tts": "By the end of Section 1, you'll be able to:"
+    }
+   ]
+  },
+  {
+   "id": "home-c01-03",
+   "start": 9.601,
+   "end": 12.829,
+   "sentences": [
+    {
+     "i": 0,
+     "start": 9.601,
+     "end": 12.829,
+     "tts": "Fold a regulation dart from a single sheet of paper."
+    }
+   ]
+  },
+  {
+   "id": "home-c01-04",
+   "start": 13.526,
+   "end": 17.519,
+   "sentences": [
+    {
+     "i": 0,
+     "start": 13.526,
+     "end": 17.519,
+     "tts": "Achieve stable, level flight across a standard cubicle."
+    }
+   ]
+  },
+  {
+   "id": "home-c01-05",
+   "start": 18.123,
+   "end": 20.48,
+   "sentences": [
+    {
+     "i": 0,
+     "start": 18.123,
+     "end": 20.48,
+     "tts": "Diagnose a nose-dive under pressure."
+    }
+   ]
+  }
+ ]
+}

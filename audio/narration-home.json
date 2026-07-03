@@ -1,0 +1,7 @@
+[
+ { "id": "home-c01-01", "card": 1, "tag": "h1", "text": "Paper Aviation", "tts": "Paper Aviation." },
+ { "id": "home-c01-02", "card": 1, "tag": "p", "text": "The serious professional's guide to folding a paper airplane that actually flies. By the end of Section 1 you'll be able to:", "tts": "The serious professional's guide to folding a paper airplane that actually flies. By the end of Section 1, you'll be able to:" },
+ { "id": "home-c01-03", "card": 1, "tag": "li", "text": "Fold a regulation dart from a single sheet of paper.", "tts": "Fold a regulation dart from a single sheet of paper." },
+ { "id": "home-c01-04", "card": 1, "tag": "li", "text": "Achieve stable, level flight across a standard cubicle.", "tts": "Achieve stable, level flight across a standard cubicle." },
+ { "id": "home-c01-05", "card": 1, "tag": "li", "text": "Diagnose a nose-dive under pressure.", "tts": "Diagnose a nose-dive under pressure." }
+]

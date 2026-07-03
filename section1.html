@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Section 1: The Dart — Paper Aviation</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="stylesheet" href="theme.css">
+<style>
+    .skip-link { position: absolute; left: -9999px; top: 0; background: var(--brand-purple-deep); color: #fff; padding: 10px 16px; border-radius: 0 0 8px 0; z-index: 200; }
+    .skip-link:focus { left: 0; }
+
+    /* Card 1 hero image */
+    .card-image { margin: 0 0 16px; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+    .card-image img { display: block; width: 100%; height: auto; }
+
+    /* Fold steps with per-step diagrams */
+    .fold-step { display: flex; gap: 14px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line-soft); }
+    .fold-step:last-child { border-bottom: none; }
+    .step-num {
+        flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+        background: var(--brand-purple); color: #fff; font-weight: 700; font-size: 0.85rem;
+        display: flex; align-items: center; justify-content: center;
+    }
+    .step-diagram {
+        width: 92px; height: 86px; flex-shrink: 0; background: #fff;
+        border: 1px solid var(--line); border-radius: 8px; padding: 4px; box-sizing: border-box;
+        object-fit: contain;
+    }
+    .fold-step p { margin: 0; flex: 1; min-width: 0; }
+    @media (max-width: 520px) { .step-diagram { width: 70px; height: 66px; } .fold-step { gap: 10px; } }
+
+    /* Demo video — fixed 16:9, centered */
+    .demo-video { max-width: 640px; margin: 14px auto 16px; border-radius: var(--r-md); overflow: hidden; background: #000; aspect-ratio: 16 / 9; }
+    .demo-video video { width: 100%; height: 100%; object-fit: contain; display: block; background: #000; }
+    .video-hint { font-size: 0.85rem; color: var(--muted); margin: 8px auto 0; max-width: 640px; text-align: center; }
+
+    /* Why-learn list */
+    .why-list { list-style: none; margin: 10px 0 14px; padding: 0; display: flex; flex-direction: column; gap: 11px; }
+    .why-list li { display: flex; gap: 14px; align-items: flex-start; margin: 0; line-height: 1.5; }
+    .why-list .why-icon {
+        flex: 0 0 34px; width: 34px; height: 34px; margin-top: 1px;
+        display: inline-flex; align-items: center; justify-content: center;
+        border-radius: 50%; background: var(--brand-purple); color: #fff;
+    }
+    .why-list .why-icon svg { width: 19px; height: 19px; display: block; }
+    .why-list .why-text { flex: 1 1 auto; text-wrap: pretty; }
+
+    /* Scenario */
+    .scenario-head { display: flex; gap: 24px; align-items: center; margin: 0 0 4px; }
+    .scenario-col { flex: 1 1 auto; min-width: 0; }
+    .scenario-q { margin: 0 0 14px; }
+    .scenario-col .scenario-options { margin: 0; }
+    .scenario-figure { flex: 0 0 auto; margin: 0; }
+    .scenario-figure img { width: 300px; max-width: 100%; height: auto; border-radius: var(--r-md); display: block; }
+    @media (max-width: 700px) {
+        .scenario-head { flex-direction: column; align-items: stretch; }
+        .scenario-figure { text-align: center; }
+        .scenario-figure img { width: 100%; max-width: 380px; margin: 8px auto 0; }
+    }
+    .scenario-feedback { position: relative; }
+    .fb-audio {
+        float: right; margin: 0 0 4px 12px; width: 30px; height: 30px; flex: none;
+        display: inline-flex; align-items: center; justify-content: center;
+        border-radius: 50%; border: 1px solid var(--line); background: var(--surface);
+        color: var(--brand-purple); cursor: pointer; transition: background .15s, border-color .15s;
+    }
+    .fb-audio svg { display: block; width: 17px; height: 17px; }
+    .fb-audio:hover { border-color: var(--brand-purple); }
+    .fb-audio.nclip-playing { background: var(--brand-purple); color: #fff; border-color: var(--brand-purple); box-shadow: none; }
+    /* The engine's .nclip pseudo-label is meant for a text line, not this icon button — hide it. */
+    .fb-audio::after, .fb-audio.nclip-playing::after { content: none; }
+    .scenario-options { display: grid; gap: 10px; margin: 16px 0 0; }
+    .scenario-option {
+        position: relative; text-align: left; width: 100%; padding: 14px 42px 14px 16px; border-radius: var(--r-md);
+        border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+        font-size: 0.96rem; line-height: 1.45; cursor: pointer; transition: border-color .15s, background .15s;
+    }
+    .scenario-option:hover { border-color: var(--brand-purple); }
+    .scenario-option:focus-visible { outline: 2px solid var(--brand-purple); outline-offset: 2px; }
+    .scenario-option.correct { border-color: var(--success); background: var(--success-soft); }
+    .scenario-option.incorrect { border-color: var(--danger); background: var(--danger-soft); }
+    /* Shape-based correctness cue (not color-dependent) */
+    .scenario-option.correct::after, .scenario-option.incorrect::after {
+        position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+        font-weight: 800; font-size: 1.05rem; line-height: 1;
+    }
+    .scenario-option.correct::after { content: "\2713"; color: var(--success); }
+    .scenario-option.incorrect::after { content: "\2717"; color: var(--danger); }
+    .scenario-option[disabled] { cursor: default; }
+    .scenario-feedback { display: none; margin: 16px 0 0; padding: 14px 16px; border-radius: var(--r-md); background: var(--canvas-2); border-left: 3px solid var(--brand-purple); }
+    .scenario-feedback.active { display: block; }
+    .scenario-feedback strong { color: var(--brand-purple-deep); }
+    /* ─── Cover card (first slide) ─── */
+    .cover-slide .home-hero { position: relative; overflow: hidden; background: var(--brand-gradient-hero); color: #fff; border-radius: var(--r-xl); padding: 36px 24px 32px; }
+    .home-hero .eyebrow { background: rgba(255,255,255,0.20); color: #fff; }
+    .home-hero h1 { color: #fff; font-size: var(--step-4); margin: 8px 0 12px; line-height: 1.12; }
+    .home-hero .lede { color: rgba(255,255,255,0.96); font-size: 1.02rem; margin: 0 0 14px; max-width: 30rem; }
+    .home-hero .hero-fineprint { margin: 14px 0 0; font-size: 0.85rem; color: rgba(255,255,255,0.85); }
+    .home-hero .outcome-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+    .home-hero .outcome-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 0.96rem; color: #fff; line-height: 1.45; }
+    .home-hero .outcome-list li::before { content: ""; flex-shrink: 0; width: 20px; height: 20px; margin-top: 2px; border-radius: 50%; background: rgba(255,255,255,0.22); background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>"); background-size: 13px 13px; background-repeat: no-repeat; background-position: center; }
+    .home-hero .hero-plane { position: absolute; right: 18px; bottom: 14px; width: 130px; height: 130px; color: #fff; opacity: 0.16; transform: rotate(-12deg); pointer-events: none; }
+    @media (max-width: 599px) { .home-hero .hero-plane { display: none; } }
+    @media (min-width: 768px) { .cover-slide .home-hero { padding: 52px 44px; padding-right: 220px; } .home-hero h1 { max-width: 560px; } .home-hero .lede, .home-hero .outcome-list { max-width: 34rem; } .home-hero .hero-plane { width: 180px; height: 180px; right: 36px; } }
+
+    body.pa-cover .part-nav-audio { display: none; }   /* no narration on the silent cover card */
+
+    /* ─── Search (top-right) + Quick reference moved to the left ─── */
+    .pa-search { grid-column: 3; grid-row: 1; justify-self: end; position: relative; }
+    .topbar.has-progress .topbar-cheat { grid-column: 1; justify-self: start; }
+    .pa-search-field { display: flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 999px; background: #fff; padding: 5px 12px; transition: border-color .15s, box-shadow .15s; }
+    .pa-search-field:focus-within { border-color: var(--brand-purple); box-shadow: 0 0 0 3px var(--brand-purple-soft); }
+    .pa-search-ic { width: 15px; height: 15px; color: var(--brand-purple); flex-shrink: 0; }
+    .pa-search input { border: none; outline: none; background: transparent; font: inherit; font-size: 0.85rem; color: var(--ink); width: clamp(92px, 18vw, 180px); padding: 2px 0; }
+    .pa-search input::placeholder { color: var(--muted); }
+    .pa-search-clear { border: none; background: transparent; color: var(--muted); font-size: 1.15rem; line-height: 1; cursor: pointer; padding: 0 2px; }
+    .pa-search-results { position: absolute; right: 0; top: calc(100% + 8px); width: min(360px, 86vw); max-height: 62vh; overflow-y: auto; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); box-shadow: 0 12px 32px rgba(0,0,0,.16); z-index: 200; padding: 6px; }
+    .pa-search-item { display: block; width: 100%; text-align: left; border: none; background: transparent; border-radius: var(--r-sm); padding: 9px 11px; cursor: pointer; }
+    .pa-search-item:hover, .pa-search-item.is-active { background: var(--brand-purple-soft); }
+    .pa-search-card { display: block; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; color: var(--brand-purple); margin-bottom: 2px; }
+    .pa-search-snip { display: block; font-size: 0.85rem; line-height: 1.4; color: var(--ink-soft); }
+    .pa-search mark { background: #fde68a; color: inherit; padding: 0 1px; border-radius: 2px; }
+    .pa-search-empty { padding: 12px; font-size: 0.85rem; color: var(--muted); }
+    .pa-search-flash { animation: paflash 2.2s ease-out; border-radius: 4px; }
+    @keyframes paflash { 0%, 35% { background: #fff3c4; box-shadow: 0 0 0 6px #fff3c4; } 100% { background: transparent; box-shadow: 0 0 0 0 transparent; } }
+    /* Mobile: the topbar grid is too tight to show the search inline, so collapse it
+       to just the magnifier; tapping it expands a full-width bar over the title row. */
+    @media (max-width: 639px) {
+        .pa-search-field { padding: 8px; cursor: pointer; }
+        .pa-search-ic { width: 17px; height: 17px; }
+        .pa-search input { display: none; }
+        .pa-search-clear { display: none; }
+        .pa-search.expanded { position: absolute; left: 8px; right: 8px; top: 0; bottom: 0; z-index: 210; display: flex; align-items: center; background: var(--surface); }
+        .pa-search.expanded .pa-search-field { flex: 1; cursor: text; padding: 8px 14px; border-color: var(--brand-purple); box-shadow: 0 0 0 3px var(--brand-purple-soft); }
+        .pa-search.expanded input { display: block; width: 100%; padding: 2px 0; }
+        .pa-search.expanded .pa-search-clear { display: block; font-size: 1.3rem; padding: 0 4px; }
+        .pa-search.expanded .pa-search-results { left: 0; right: 0; width: auto; }
+    }
+
+    /* ─── Table of contents (opens from the center progress cluster) ─── */
+    .topbar-progress.is-toc-trigger { cursor: pointer; position: relative; }
+    .toc-trigger-row { display: flex; align-items: center; gap: 4px; min-width: 0; max-width: 60vw; }
+    .toc-chev { color: var(--muted); flex-shrink: 0; transition: transform .15s; }
+    .topbar-progress.is-toc-trigger:hover .topbar-section, .topbar-progress.is-toc-trigger:hover .toc-chev { color: var(--brand-purple-deep); }
+    .topbar-progress.is-toc-trigger[aria-expanded="true"] .toc-chev { transform: rotate(180deg); }
+    .pa-toc { position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%); width: min(280px, 88vw); max-height: 72vh; overflow-y: auto; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); box-shadow: 0 12px 32px rgba(0,0,0,.16); z-index: 200; padding: 6px; }
+    .pa-toc-item { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; border: none; background: transparent; border-radius: var(--r-sm); padding: 9px 11px; cursor: pointer; font-size: 0.9rem; color: var(--ink); line-height: 1.3; }
+    .pa-toc-item:hover { background: var(--brand-purple-soft); }
+    .pa-toc-item.current { font-weight: 700; color: var(--brand-purple-deep); }
+    .pa-toc-item.is-link { color: var(--brand-purple-deep); font-weight: 600; }
+    .pa-toc-item.locked, .pa-toc-item:disabled { color: var(--muted); cursor: not-allowed; }
+    .pa-toc-item:disabled:hover { background: transparent; }
+    .pa-toc-ic { width: 16px; flex-shrink: 0; color: var(--brand-purple); font-size: 0.8rem; display: inline-flex; align-items: center; justify-content: center; }
+    .pa-toc-item.locked .pa-toc-ic, .pa-toc-item:disabled .pa-toc-ic { color: var(--muted); }
+    .pa-toc-sep { height: 1px; background: var(--line); margin: 5px 8px; }
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+<header class="topbar"></header>
+
+<main id="main" class="module-shell">
+    <h1 class="sr-only">Section 1: The Dart</h1>
+    <div class="section-marker">Section 1 &middot; <strong>The Dart</strong></div>
+
+    <div class="card-deck" id="sectionDeck">
+
+    <!-- Card 1: The fold (one diagram per step) -->
+    <section class="card-slide" data-slug="fold">
+    <div class="card">
+        <h2 style="margin-top:0;">The fold</h2>
+        <div class="fold-step"><span class="step-num" aria-hidden="true">1</span><p>Start with a sheet in portrait and fold it in half lengthwise, then open it back up. That center crease is your guide for everything else.</p><img class="step-diagram" src="assets/fold-1.svg" alt=""></div>
+        <div class="fold-step"><span class="step-num" aria-hidden="true">2</span><p>Fold the top two corners down to meet the center line. You should now have a point, and a faint sense of accomplishment.</p><img class="step-diagram" src="assets/fold-2.svg" alt=""></div>
+        <div class="fold-step"><span class="step-num" aria-hidden="true">3</span><p>Fold those angled edges in to the center line again. The point gets longer and sharper.</p><img class="step-diagram" src="assets/fold-3.svg" alt=""></div>
+        <div class="fold-step"><span class="step-num" aria-hidden="true">4</span><p>Fold the whole plane in half along that first crease, so the flaps sit on the outside.</p><img class="step-diagram" src="assets/fold-4.svg" alt=""></div>
+        <div class="fold-step"><span class="step-num" aria-hidden="true">5</span><p>Fold the top edge down on each side to make the wings, lining them up with the bottom and keeping them even.</p><img class="step-diagram" src="assets/fold-5.svg" alt=""></div>
+        <div class="fold-step"><span class="step-num" aria-hidden="true">6</span><p>Open the wings out flat into a T, hold it underneath near the nose, and throw it level with a smooth, firm flick.</p><img class="step-diagram" src="assets/fold-6.svg" alt=""></div>
+    </div>
+    </section>
+
+    <!-- Card 3: Watch it done (gated video) -->
+    <section class="card-slide" data-slug="video">
+    <div class="card">
+        <h2 style="margin-top:0;">Watch it done</h2>
+        <div class="demo-video">
+            <video id="foldVideo" muted playsinline preload="metadata" poster="assets/fold-demo-poster.jpg" aria-label="Demonstration: folding the paper dart from start to finish">
+                <source src="assets/fold-demo.mp4" type="video/mp4">
+            </video>
+        </div>
+        <p>If the diagrams didn't land, don't take it personally. Some things are easier to just watch. Fold the sheet in half the long way, then open it back up. Bring the top two corners in to the center crease. Fold the slanted edges in again, so the nose gets long and sharp. Fold the whole plane in half, pull each wing down to the bottom, and open them back out into a flat T. That's your dart. Now go try it, dignity mostly intact.</p>
+        <p class="video-hint">Press play, or tap any line above to jump to that moment in the video.</p>
+    </div>
+    </section>
+
+    <!-- Card 4: Pre-flight check scenario -->
+    <section class="card-slide" data-slug="preflight">
+    <div class="card">
+        <h2 style="margin-top:0;">Pre-flight check</h2>
+        <div class="scenario-head">
+            <div class="scenario-col">
+                <p class="scenario-q">One last thing before take-off. If your dart plane starts nose-diving straight into the carpet, what's the most likely fix?</p>
+                <div class="scenario-options" id="scenarioOptions" role="group" aria-label="Choose the most likely fix">
+                    <button class="scenario-option" data-correct="true" data-clip="audio/clips/s1-fb-01.mp3" data-lead="Cleared for takeoff." data-fb="A little upward bend on the back edge of each wing adds lift and pulls the nose up.">Bend the back edge of each wing up slightly.</button>
+                    <button class="scenario-option" data-clip="audio/clips/s1-fb-02.mp3" data-lead="Tempting, but no." data-fb="Throwing harder just makes it nose-dive faster, and with more conviction.">Throw it harder.</button>
+                    <button class="scenario-option" data-clip="audio/clips/s1-fb-03.mp3" data-lead="Bold, but wrong." data-fb="Weighting the nose makes a nose-dive worse, not better.">Tape a paperclip to the nose.</button>
+                    <button class="scenario-option" data-clip="audio/clips/s1-fb-04.mp3" data-lead="Grounded." data-fb="Not a folding solution, but an understandable one. The wings are still the answer.">Crumple it and reconsider your career.</button>
+                </div>
+            </div>
+            <div class="scenario-figure"><img src="assets/crashed-dart.jpg" alt="A paper dart that has crash-landed nose-first, nose crumpled and tail in the air"></div>
+        </div>
+        <div class="scenario-feedback" id="scenarioFeedback" aria-live="polite"></div>
+    </div>
+    </section>
+
+    </div><!-- /card-deck -->
+</main>
+
+<script>window.Analytics = window.Analytics || { track: function(){} };</script>
+<script src="shared.js"></script>
+<script src="narration.js"></script>
+<script>
+(function () {
+    const deck = document.getElementById('sectionDeck');
+    let scenarioPassed = false;   // set true once the pre-flight check is answered correctly
+
+    // Video gate: require the demo to play before advancing off the video card.
+    // If the file is missing or errors, never trap the learner.
+    let videoPlayed = false, videoError = false;
+    const vid = document.getElementById('foldVideo');
+    let videoCardIdx = -1;
+    deck.querySelectorAll('.card-slide').forEach((s, i) => { if (s.querySelector('#foldVideo')) videoCardIdx = i; });
+    if (vid) {
+        vid.addEventListener('play', () => { videoPlayed = true; });
+        vid.addEventListener('ended', () => { videoPlayed = true; });
+        vid.addEventListener('error', () => { videoError = true; }, true);
+        // No native controls — clicking the video toggles the narration (which drives the video).
+        vid.style.cursor = 'pointer';
+        vid.addEventListener('click', () => { const pb = document.querySelector('.nb-play'); if (pb) pb.click(); });
+    }
+
+    let tocVisit = null;   // set by buildTOC — records visited cards for the table of contents
+    const nav = LUC.partNav({
+        sectionLabel: 'Section 1: The Dart',
+        deck: deck,
+        prevHref: 'index.html',
+        nextHref: 'complete.html',
+        nextLabel: 'Finish',
+        canAdvance: function (i) {
+            const card = deck.querySelectorAll('.card-slide')[i];
+            if (card && card.querySelector('#foldVideo')) {
+                return (videoPlayed || videoError) ? true : 'Watch the demo to continue.';
+            }
+            if (card && card.querySelector('#scenarioOptions')) {
+                return scenarioPassed ? true : 'Answer the pre-flight check correctly to finish.';
+            }
+            return true;
+        },
+        // Blocked advance (button / swipe / arrow) → surface what's needed rather than
+        // dead-ending on a toast. Neither gate is auto-satisfied (you can't auto-watch a
+        // demo or auto-answer the check), so both scroll + pulse; the toast supplies wording.
+        onGate: function (i) {
+            const card = deck.querySelectorAll('.card-slide')[i];
+            if (!card) return false;
+            const video = card.querySelector('#foldVideo');
+            if (video) { LUC.gatePulse(video.closest('figure, .card-media, .video-wrap') || video); return false; }
+            const optsEl = card.querySelector('#scenarioOptions');
+            if (optsEl) { LUC.gatePulse(optsEl); return false; }
+            return false;
+        },
+        onCardChange: function (index, total) {
+            if (index === total - 1) LUC.progress.markSectionComplete('section1');
+            if (window.Narration) Narration.setCard(index);
+            if (tocVisit) tocVisit(index);
+        }
+    });
+
+    if (window.Narration) {
+        Narration.init({ deck: deck, section: 's1', clipsBase: 'audio/clips/', goto: nav.goto });
+        // Card 3's muted video is a companion: it plays/pauses/seeks in sync with the voiceover.
+        if (vid && videoCardIdx >= 0) Narration.bindMedia(videoCardIdx, vid);
+        // Start narration on whichever card is active (the cover's search can deep-link via #slug).
+        const startIdx = Array.from(deck.querySelectorAll('.card-slide')).findIndex(c => c.classList.contains('active'));
+        Narration.setCard(startIdx >= 0 ? startIdx : 0);
+    }
+
+    const opts = document.getElementById('scenarioOptions');
+    const fb = document.getElementById('scenarioFeedback');
+    // Material "volume_up" — one filled path, no stroke, renders crisp at any size
+    const SPEAKER = '<svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>';
+    if (opts) {
+        // Shuffle the options once on load so the correct answer isn't always in the same spot.
+        const items = Array.from(opts.children);
+        for (let i = items.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            const t = items[i]; items[i] = items[j]; items[j] = t;
+        }
+        items.forEach(el => opts.appendChild(el));
+
+        // No lock-out: the learner can keep trying and explore every wrong answer too.
+        opts.querySelectorAll('.scenario-option').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const correct = btn.dataset.correct === 'true';
+                if (correct) { scenarioPassed = true; nav.refreshGate(); }   // unlocks + un-grays the Finish button
+                opts.querySelectorAll('.scenario-option').forEach(b => b.classList.remove('correct', 'incorrect'));
+                btn.classList.add(correct ? 'correct' : 'incorrect');
+                const clip = btn.dataset.clip;
+                const audioBtn = (clip && window.Narration)
+                    ? '<button type="button" class="fb-audio" aria-label="Play this feedback aloud">' + SPEAKER + '</button>' : '';
+                fb.innerHTML = audioBtn + '<span class="fb-text"><strong>' + btn.dataset.lead + '</strong> ' + btn.dataset.fb + '</span>';
+                fb.classList.add('active');
+                LUC.progress.markSectionComplete('section1');
+                if (clip && window.Narration) {
+                    const ab = fb.querySelector('.fb-audio');
+                    ab.addEventListener('click', () => Narration.playClip(clip, ab));
+                    Narration.playClip(clip, ab);   // auto-play on reveal — the option tap is a valid user gesture
+                }
+            });
+        });
+    }
+
+    // Re-gray / un-gray Next the moment the video gate clears.
+    ['play', 'ended', 'error'].forEach(function (ev) {
+        if (vid) vid.addEventListener(ev, function () { nav.refreshGate(); });
+    });
+
+    const slides = Array.from(deck.querySelectorAll('.card-slide'));
+
+    /* ─────────── Search (top-left) ─────────── */
+    function buildSearch(navCtl) {
+        const topbar = document.querySelector('.topbar');
+        if (!topbar) return;
+        const SEL = 'h1, h2, h3, p, li';
+        const index = [];
+        slides.forEach((card, ci) => {
+            const titleEl = card.querySelector('h1, h2, h3');
+            const cardTitle = titleEl ? titleEl.textContent.trim() : ('Card ' + (ci + 1));
+            const seen = new Set();
+            card.querySelectorAll(SEL).forEach(el => {
+                const text = (el.textContent || '').replace(/\s+/g, ' ').trim();
+                if (text.length < 3 || seen.has(text)) return;
+                seen.add(text);
+                index.push({ ci: ci, cardTitle: cardTitle, el: el, text: text, lc: text.toLowerCase() });
+            });
+        });
+        function esc(s) { const d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; }
+        function snippet(text, q) {
+            const at = text.toLowerCase().indexOf(q);
+            const start = Math.max(0, at - 32), end = Math.min(text.length, at + q.length + 64);
+            return esc((start > 0 ? '… ' : '') + text.slice(start, at)) + '<mark>' + esc(text.slice(at, at + q.length)) + '</mark>' + esc(text.slice(at + q.length, end) + (end < text.length ? ' …' : ''));
+        }
+        const IC = '<svg class="pa-search-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>';
+        const wrap = document.createElement('div');
+        wrap.className = 'pa-search';
+        wrap.innerHTML = '<div class="pa-search-field">' + IC +
+            '<input type="text" autocomplete="off" spellcheck="false" placeholder="Search…" aria-label="Search this section" role="combobox" aria-expanded="false" aria-controls="paSearchResults">' +
+            '<button type="button" class="pa-search-clear" aria-label="Clear search" hidden>&times;</button></div>' +
+            '<div class="pa-search-results" id="paSearchResults" role="listbox" hidden></div>';
+        topbar.appendChild(wrap);
+        const input = wrap.querySelector('input'), results = wrap.querySelector('.pa-search-results'), clearBtn = wrap.querySelector('.pa-search-clear');
+        let current = [], active = -1;
+        function close() { results.hidden = true; results.innerHTML = ''; input.setAttribute('aria-expanded', 'false'); current = []; active = -1; }
+        function paint() { Array.from(results.querySelectorAll('.pa-search-item')).forEach((it, i) => it.classList.toggle('is-active', i === active)); }
+        function run(raw) {
+            clearBtn.hidden = raw.length === 0;
+            const q = raw.trim().toLowerCase();
+            if (q.length < 2) { close(); return; }
+            const found = [];
+            for (const e of index) { if (e.lc.indexOf(q) !== -1) { found.push(e); if (found.length > 12) break; } }
+            current = found; active = -1;
+            results.innerHTML = found.length ? found.map((e, i) =>
+                '<button type="button" class="pa-search-item" role="option" data-i="' + i + '"><span class="pa-search-card">' + esc(e.cardTitle) + '</span><span class="pa-search-snip">' + snippet(e.text, q) + '</span></button>').join('')
+                : '<div class="pa-search-empty">No matches for “' + esc(raw.trim()) + '”</div>';
+            results.hidden = false; input.setAttribute('aria-expanded', 'true');
+        }
+        function go(i) {
+            const e = current[i]; if (!e) return;
+            close(); input.blur(); wrap.classList.remove('expanded'); navCtl.jump(e.ci);
+            setTimeout(() => { try { e.el.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (err) {} e.el.classList.add('pa-search-flash'); setTimeout(() => e.el.classList.remove('pa-search-flash'), 2200); }, 90);
+        }
+        input.addEventListener('input', () => run(input.value));
+        input.addEventListener('focus', () => { if (input.value.trim().length >= 2) run(input.value); });
+        input.addEventListener('keydown', (e) => {
+            if (results.hidden || !current.length) { if (e.key === 'Escape') { input.blur(); wrap.classList.remove('expanded'); } return; }
+            if (e.key === 'ArrowDown') { e.preventDefault(); active = Math.min(active + 1, current.length - 1); paint(); }
+            else if (e.key === 'ArrowUp') { e.preventDefault(); active = Math.max(active - 1, 0); paint(); }
+            else if (e.key === 'Enter') { e.preventDefault(); go(active >= 0 ? active : 0); }
+            else if (e.key === 'Escape') { close(); wrap.classList.remove('expanded'); }
+        });
+        results.addEventListener('click', (e) => { const it = e.target.closest('.pa-search-item'); if (it) go(parseInt(it.dataset.i, 10)); });
+        // Mobile: the field collapses to just the icon; tapping it expands a full-width
+        // search bar over the title row. Collapse on clear, Escape, jump, or outside tap.
+        const field = wrap.querySelector('.pa-search-field');
+        const collapsible = () => window.matchMedia('(max-width: 639px)').matches;
+        field.addEventListener('click', (e) => {
+            if (collapsible() && !wrap.classList.contains('expanded') && e.target !== clearBtn) { wrap.classList.add('expanded'); input.focus(); }
+        });
+        clearBtn.addEventListener('click', () => {
+            input.value = ''; clearBtn.hidden = true; close();
+            if (collapsible() && wrap.classList.contains('expanded')) wrap.classList.remove('expanded'); else input.focus();
+        });
+        document.addEventListener('click', (e) => { if (!wrap.contains(e.target)) { close(); wrap.classList.remove('expanded'); } });
+    }
+
+    /* ─────────── Table of contents (center progress cluster) ─────────── */
+    function buildTOC(navCtl) {
+        const prog = document.querySelector('.topbar-progress');
+        if (!prog || prog.dataset.tocReady) return;
+        prog.dataset.tocReady = '1';
+        const SECTIONS = [
+            { label: 'Cover', href: 'index.html' },
+            { label: 'The Fold', slug: 'fold' },
+            { label: 'Watch It Done', slug: 'video' },
+            { label: 'Pre-flight Check', slug: 'preflight' }
+        ];
+        const sec = [];
+        SECTIONS.forEach(s => {
+            if (s.href) { sec.push({ label: s.label, href: s.href }); return; }
+            const start = slides.findIndex(c => c.dataset.slug === s.slug);
+            if (start >= 0) sec.push({ label: s.label, start: start });
+        });
+        if (!sec.length) return;
+        const cardEntries = sec.filter(s => s.start !== undefined);
+        cardEntries.forEach((s, i) => { s.end = (i + 1 < cardEntries.length) ? cardEntries[i + 1].start - 1 : slides.length - 1; });
+        const visited = new Set();
+        function esc(t) { const d = document.createElement('div'); d.textContent = t == null ? '' : t; return d.innerHTML; }
+        function activeIdx() { return slides.findIndex(c => c.classList.contains('active')); }
+        function rangeVisited(s) { for (let i = s.start; i <= s.end; i++) if (visited.has(i)) return true; return false; }
+        function curSec() { const ci = activeIdx(); return sec.findIndex(s => s.start !== undefined && ci >= s.start && ci <= s.end); }
+        function isUnlocked() { try { return !!(LUC.progress && LUC.progress.isSectionComplete && LUC.progress.isSectionComplete('section1')); } catch (e) { return false; } }
+        const CHEV = '<svg class="toc-chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>';
+        const label = prog.querySelector('.topbar-section');
+        const row = document.createElement('div'); row.className = 'toc-trigger-row';
+        prog.insertBefore(row, prog.firstChild);
+        if (label) row.appendChild(label);
+        row.insertAdjacentHTML('beforeend', CHEV);
+        prog.classList.add('is-toc-trigger');
+        prog.setAttribute('role', 'button'); prog.setAttribute('tabindex', '0');
+        prog.setAttribute('aria-haspopup', 'true'); prog.setAttribute('aria-expanded', 'false');
+        prog.setAttribute('aria-label', 'Table of contents — jump to a section');
+        const menu = document.createElement('div'); menu.className = 'pa-toc'; menu.setAttribute('role', 'menu'); menu.hidden = true;
+        prog.appendChild(menu);
+        const CHECK = '✓', DOT = '●';
+        const HOME = '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>';
+        const LOCK = '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
+        function renderMenu() {
+            const cur = curSec(); const unlocked = isUnlocked(); let html = '';
+            sec.forEach((s, i) => {
+                if (s.href) { html += '<button type="button" class="pa-toc-item is-link" role="menuitem" data-href="' + s.href + '"><span class="pa-toc-ic">' + HOME + '</span><span class="pa-toc-label">' + esc(s.label) + '</span></button>'; return; }
+                if (i > 0 && sec[i - 1].href) html += '<div class="pa-toc-sep"></div>';
+                const isCur = i === cur;
+                const jumpable = isCur || rangeVisited(s) || unlocked;
+                const cls = isCur ? 'current' : (jumpable ? 'visited' : 'locked');
+                const marker = isCur ? DOT : (jumpable ? CHECK : LOCK);
+                const dis = jumpable ? '' : ' disabled title="You’ll be able to jump here once you’ve reached it"';
+                html += '<button type="button" class="pa-toc-item ' + cls + '" role="menuitem"' + dis + ' data-start="' + s.start + '"><span class="pa-toc-ic">' + marker + '</span><span class="pa-toc-label">' + esc(s.label) + '</span></button>';
+            });
+            menu.innerHTML = html;
+        }
+        function openMenu() {
+            renderMenu(); menu.hidden = false; prog.setAttribute('aria-expanded', 'true');
+            // Move focus into the menu so keyboard users can arrow through and select (Enter/Space
+            // then fires the focused button natively). :focus-visible keeps the ring keyboard-only.
+            const cur = menu.querySelector('.pa-toc-item.current:not([disabled])') || menu.querySelector('.pa-toc-item:not([disabled])');
+            if (cur) cur.focus();
+        }
+        function closeMenu() { menu.hidden = true; prog.setAttribute('aria-expanded', 'false'); }
+        prog.addEventListener('click', (e) => { if (menu.contains(e.target)) return; menu.hidden ? openMenu() : closeMenu(); });
+        prog.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); menu.hidden ? openMenu() : closeMenu(); } else if (e.key === 'Escape') closeMenu(); });
+        menu.addEventListener('click', (e) => {
+            const it = e.target.closest('.pa-toc-item'); if (!it || it.disabled) return;
+            closeMenu();
+            if (it.dataset.href) { window.location.href = it.dataset.href; return; }
+            navCtl.jump(+it.dataset.start);
+        });
+        // Keyboard nav inside the open menu: up/down move, Home/End jump to ends, Esc closes
+        // and returns focus to the trigger. Enter/Space fire the focused button (click handler above).
+        menu.addEventListener('keydown', (e) => {
+            const items = Array.from(menu.querySelectorAll('.pa-toc-item:not([disabled])'));
+            if (!items.length) return;
+            const i = items.indexOf(document.activeElement);
+            if (e.key === 'ArrowDown') { e.preventDefault(); (items[i + 1] || items[0]).focus(); }
+            else if (e.key === 'ArrowUp') { e.preventDefault(); (items[i - 1] || items[items.length - 1]).focus(); }
+            else if (e.key === 'Home') { e.preventDefault(); items[0].focus(); }
+            else if (e.key === 'End') { e.preventDefault(); items[items.length - 1].focus(); }
+            else if (e.key === 'Escape') { e.preventDefault(); closeMenu(); prog.focus(); }
+        });
+        document.addEventListener('click', (e) => { if (!prog.contains(e.target)) closeMenu(); });
+        const a0 = activeIdx(); if (a0 >= 0) visited.add(a0);
+        tocVisit = function (i) { visited.add(i); if (!menu.hidden) renderMenu(); };
+    }
+
+    // shared.js rebuilds the topbar on DOMContentLoaded — mount search + TOC after that.
+    function mountTopbarTools() { buildSearch(nav); buildTOC(nav); }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mountTopbarTools);
+    else mountTopbarTools();
+})();
+</script>
+
+</body>
+</html>

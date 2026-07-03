@@ -1,0 +1,114 @@
+{
+ "duration": 45.698,
+ "blocks": [
+  {
+   "id": "s1-c02-01",
+   "start": 0.0,
+   "end": 0.836,
+   "sentences": [
+    {
+     "i": 0,
+     "start": 0.0,
+     "end": 0.836,
+     "tts": "The fold."
+    }
+   ]
+  },
+  {
+   "id": "s1-c02-02",
+   "start": 1.649,
+   "end": 11.134,
+   "sentences": [
+    {
+     "i": 0,
+     "start": 1.649,
+     "end": 7.628,
+     "tts": "Start with a sheet in portrait and fold it in half lengthwise, then open it back up."
+    },
+    {
+     "i": 1,
+     "start": 8.44,
+     "end": 11.134,
+     "tts": "That center crease is your guide for everything else."
+    }
+   ]
+  },
+  {
+   "id": "s1-c02-03",
+   "start": 11.831,
+   "end": 18.727,
+   "sentences": [
+    {
+     "i": 0,
+     "start": 11.831,
+     "end": 14.861,
+     "tts": "Fold the top two corners down to meet the center line."
+    },
+    {
+     "i": 1,
+     "start": 15.813,
+     "end": 18.727,
+     "tts": "You should now have a point, and a faint sense of accomplishment."
+    }
+   ]
+  },
+  {
+   "id": "s1-c02-04",
+   "start": 19.54,
+   "end": 24.95,
+   "sentences": [
+    {
+     "i": 0,
+     "start": 19.54,
+     "end": 22.466,
+     "tts": "Fold those angled edges in to the center line again."
+    },
+    {
+     "i": 1,
+     "start": 23.069,
+     "end": 24.95,
+     "tts": "The point gets longer and sharper."
+    }
+   ]
+  },
+  {
+   "id": "s1-c02-05",
+   "start": 25.763,
+   "end": 30.535,
+   "sentences": [
+    {
+     "i": 0,
+     "start": 25.763,
+     "end": 30.535,
+     "tts": "Fold the whole plane in half along that first crease, so the flaps sit on the outside."
+    }
+   ]
+  },
+  {
+   "id": "s1-c02-06",
+   "start": 31.046,
+   "end": 37.315,
+   "sentences": [
+    {
+     "i": 0,
+     "start": 31.046,
+     "end": 37.315,
+     "tts": "Fold the top edge down on each side to make the wings, lining them up with the bottom and keeping them even."
+    }
+   ]
+  },
+  {
+   "id": "s1-c02-07",
+   "start": 37.919,
+   "end": 45.698,
+   "sentences": [
+    {
+     "i": 0,
+     "start": 37.919,
+     "end": 45.698,
+     "tts": "Open the wings out flat into a T, hold it underneath near the nose, and throw it level with a smooth, firm flick."
+    }
+   ]
+  }
+ ]
+}

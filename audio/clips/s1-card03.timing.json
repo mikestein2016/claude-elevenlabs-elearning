@@ -1,0 +1,37 @@
+{
+ "duration": 7.802,
+ "blocks": [
+  {
+   "id": "s1-c04-01",
+   "start": 0.0,
+   "end": 0.848,
+   "sentences": [
+    {
+     "i": 0,
+     "start": 0.0,
+     "end": 0.848,
+     "tts": "Pre-flight check."
+    }
+   ]
+  },
+  {
+   "id": "s1-c04-02",
+   "start": 1.451,
+   "end": 7.802,
+   "sentences": [
+    {
+     "i": 0,
+     "start": 1.451,
+     "end": 2.868,
+     "tts": "One last thing before take-off."
+    },
+    {
+     "i": 1,
+     "start": 3.193,
+     "end": 7.802,
+     "tts": "If your dart plane starts nose-diving straight into the carpet, what's the most likely fix?"
+    }
+   ]
+  }
+ ]
+}

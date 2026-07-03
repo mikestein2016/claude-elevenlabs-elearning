@@ -1,0 +1,79 @@
+[
+ {
+  "id": "s1-c01-01",
+  "card": 1,
+  "tag": "h2",
+  "text": "The fold",
+  "tts": "The fold."
+ },
+ {
+  "id": "s1-c01-02",
+  "card": 1,
+  "tag": "p",
+  "text": "Start with a sheet in portrait and fold it in half lengthwise, then open it back up. That center crease is your guide for everything else.",
+  "tts": "Start with a sheet in portrait and fold it in half lengthwise, then open it back up. That center crease is your guide for everything else."
+ },
+ {
+  "id": "s1-c01-03",
+  "card": 1,
+  "tag": "p",
+  "text": "Fold the top two corners down to meet the center line. You should now have a point, and a faint sense of accomplishment.",
+  "tts": "Fold the top two corners down to meet the center line. You should now have a point, and a faint sense of accomplishment."
+ },
+ {
+  "id": "s1-c01-04",
+  "card": 1,
+  "tag": "p",
+  "text": "Fold those angled edges in to the center line again. The point gets longer and sharper.",
+  "tts": "Fold those angled edges in to the center line again. The point gets longer and sharper."
+ },
+ {
+  "id": "s1-c01-05",
+  "card": 1,
+  "tag": "p",
+  "text": "Fold the whole plane in half along that first crease, so the flaps sit on the outside.",
+  "tts": "Fold the whole plane in half along that first crease, so the flaps sit on the outside."
+ },
+ {
+  "id": "s1-c01-06",
+  "card": 1,
+  "tag": "p",
+  "text": "Fold the top edge down on each side to make the wings, lining them up with the bottom and keeping them even.",
+  "tts": "Fold the top edge down on each side to make the wings, lining them up with the bottom and keeping them even."
+ },
+ {
+  "id": "s1-c01-07",
+  "card": 1,
+  "tag": "p",
+  "text": "Open the wings out flat into a T, hold it underneath near the nose, and throw it level with a smooth, firm flick.",
+  "tts": "Open the wings out flat into a T, hold it underneath near the nose, and throw it level with a smooth, firm flick."
+ },
+ {
+  "id": "s1-c02-01",
+  "card": 2,
+  "tag": "h2",
+  "text": "Watch it done",
+  "tts": "Watch it done."
+ },
+ {
+  "id": "s1-c02-02",
+  "card": 2,
+  "tag": "p",
+  "text": "If the diagrams didn't land, don't take it personally. Some things are easier to just watch. Fold the sheet in half the long way, then open it back up. Bring the top two corners in to the center crease. Fold the slanted edges in again, so the nose gets long and sharp. Fold the whole plane in half, pull each wing down to the bottom, and open them back out into a flat T. That's your dart. Now go try it, dignity mostly intact.",
+  "tts": "If the diagrams didn't land, don't take it personally. Some things are easier to just watch. Fold the sheet in half the long way, then open it back up. Bring the top two corners in to the center crease. Fold the slanted edges in again, so the nose gets long and sharp. Fold the whole plane in half, pull each wing down to the bottom, and open them back out into a flat T. That's your dart. Now go try it, dignity mostly intact."
+ },
+ {
+  "id": "s1-c03-01",
+  "card": 3,
+  "tag": "h2",
+  "text": "Pre-flight check",
+  "tts": "Pre-flight check."
+ },
+ {
+  "id": "s1-c03-02",
+  "card": 3,
+  "tag": "p",
+  "text": "One last thing before take-off. If your dart plane starts nose-diving straight into the carpet, what's the most likely fix?",
+  "tts": "One last thing before take-off. If your dart plane starts nose-diving straight into the carpet, what's the most likely fix?"
+ }
+]

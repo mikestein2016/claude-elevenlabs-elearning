@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Certified — Paper Aviation</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="stylesheet" href="theme.css">
+<style>
+    .skip-link {
+        position: absolute; left: -9999px; top: 0;
+        background: var(--brand-purple-deep); color: #fff;
+        padding: 10px 16px; border-radius: 0 0 8px 0; z-index: 200;
+    }
+    .skip-link:focus { left: 0; }
+
+    .done-hero {
+        position: relative; overflow: hidden; text-align: center;
+        background: var(--brand-gradient-hero); color: #fff;
+        border-radius: var(--r-xl); padding: 40px 24px 34px; margin-bottom: 22px;
+    }
+    .done-hero .eyebrow { background: rgba(255,255,255,0.20); color: #fff; }
+    .done-hero h1 { color: #fff; font-size: var(--step-4); margin: 12px 0 12px; line-height: 1.12; }
+    .done-hero .lede { color: rgba(255,255,255,0.96); font-size: 1.04rem; margin: 0 auto; max-width: 48rem; text-wrap: pretty; }
+
+    .cert-figure { max-width: 560px; margin: 24px auto 4px; }
+    .cert-figure img { width: 100%; height: auto; border-radius: var(--r-md); display: block; }
+    /* Placeholder until the closer image is generated; swap the div for an <img>. */
+    .cert-placeholder {
+        aspect-ratio: 1 / 1; max-width: 260px; margin: 24px auto 4px; border-radius: var(--r-md);
+        background: rgba(255,255,255,0.12); border: 1px dashed rgba(255,255,255,0.4);
+        display: flex; align-items: center; justify-content: center; font-size: 4.5rem;
+    }
+
+    .next-up { background: var(--canvas-2); border: 1px solid var(--line); border-radius: var(--r-md); padding: 18px 20px; margin: 0 0 8px; }
+    .next-up h2 { font-size: var(--step-1); margin: 0 0 6px; }
+    .next-up p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+
+    .site-footer { margin: 28px 0 10px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; text-align: center; }
+    .site-footer a { color: var(--brand-purple-deep); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+<header class="topbar"></header>
+
+<main id="main" class="module-shell" style="max-width: 980px;">
+    <section class="done-hero">
+        <span class="eyebrow">Certified human</span>
+        <h1>Certified, and automation-proof</h1>
+        <p class="lede">Level 1: The Dart is complete. While the algorithms come for everything else, you now hold a credential no model can reproduce. You can fold a regulation dart, glide it across a cubicle, and recover from a nose-dive with nothing but your hands. No subscription, no prompt, billed by the hour.</p>
+        <div class="cert-figure"><img src="assets/cert-ai.jpg" alt="A computer monitor showing a sad face beside a crumpled ball of paper and a crisp folded paper dart — the digital AI can't fold paper, but you can"></div>
+    </section>
+
+    <div class="next-up">
+        <h2>What's next</h2>
+        <p>Sections 2 and 3 — the Paper Standing Desk and the Paper 3D Printer — remain locked pending budget and patent approval, respectively. We'll be in touch.</p>
+    </div>
+
+    <footer class="site-footer">
+        A demo build by <a href="https://www.idatlas.org" target="_blank" rel="noopener">ID Atlas</a>
+    </footer>
+</main>
+
+<script>window.Analytics = window.Analytics || { track: function(){} };</script>
+<script src="shared.js"></script>
+<script src="narration.js"></script>
+<script>
+(function () {
+    LUC.partNav({
+        sectionLabel: 'Certified',
+        prevHref: 'section1.html', prevLabel: 'Back',
+        nextHref: 'index.html', nextLabel: 'Back to start'
+    });
+
+    // Narrate the closer (title + description only).
+    if (window.Narration) {
+        Narration.init({ container: document.querySelector('.done-hero'), section: 'done', clipsBase: 'audio/clips/', goto: function () {} });
+        Narration.setCard(0);
+    }
+})();
+</script>
+
+</body>
+</html>

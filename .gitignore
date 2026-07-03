@@ -1,0 +1,24 @@
+# Secrets — never commit
+.env
+
+# Generated audio artifacts (regenerate with audio/generate.py).
+# The .mp3 and .timing.json files ARE committed so the demo runs without a key.
+audio/clips/*.alignment.json
+audio/clips/*.settings.json
+
+# Scratch / generation inputs (not part of the demo)
+audio/voice-samples/
+Gemini_Generated_Image_*.png
+
+# Accidental clipboard image pastes into markdown (VS Code names them image*.png)
+/image*.png
+
+# OS cruft
+.DS_Store
+
+# Internal drafting / marketing notes — keep local, not for the public repo
+TUTORIAL-DRAFTS.md
+
+# Firebase CLI debug logs (contain account email/auth debug) — never commit
+firebase-debug.log
+*.log

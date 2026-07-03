@@ -1,0 +1,73 @@
+{
+ "duration": 29.536,
+ "blocks": [
+  {
+   "id": "s1-c03-01",
+   "start": 0.0,
+   "end": 0.824,
+   "sentences": [
+    {
+     "i": 0,
+     "start": 0.0,
+     "end": 0.824,
+     "tts": "Watch it done."
+    }
+   ]
+  },
+  {
+   "id": "s1-c03-02",
+   "start": 1.428,
+   "end": 29.536,
+   "sentences": [
+    {
+     "i": 0,
+     "start": 1.428,
+     "end": 4.168,
+     "tts": "If the diagrams didn't land, don't take it personally."
+    },
+    {
+     "i": 1,
+     "start": 4.772,
+     "end": 6.85,
+     "tts": "Some things are easier to just watch."
+    },
+    {
+     "i": 2,
+     "start": 7.454,
+     "end": 10.414,
+     "tts": "Fold the sheet in half the long way, then open it back up."
+    },
+    {
+     "i": 3,
+     "start": 11.018,
+     "end": 13.468,
+     "tts": "Bring the top two corners in to the center crease."
+    },
+    {
+     "i": 4,
+     "start": 14.071,
+     "end": 17.868,
+     "tts": "Fold the slanted edges in again, so the nose gets long and sharp."
+    },
+    {
+     "i": 5,
+     "start": 18.309,
+     "end": 24.114,
+     "tts": "Fold the whole plane in half, pull each wing down to the bottom, and open them back out into a flat T."
+    },
+    {
+     "i": 6,
+     "start": 24.718,
+     "end": 25.705,
+     "tts": "That's your dart."
+    },
+    {
+     "i": 7,
+     "start": 26.308,
+     "end": 29.536,
+     "tts": "Now go try it, dignity mostly intact."
+    }
+   ]
+  }
+ ]
+}

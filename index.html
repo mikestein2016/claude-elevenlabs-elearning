@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paper Aviation — A Professional Certification</title>
+<meta name="description" content="A deadpan paper-airplane certification — and a working demo of e-learning built in code with AI-generated narration.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Paper Aviation — a code-built e-learning demo">
+<meta property="og:description" content="A deadpan paper-airplane certification — and a working demo of e-learning built in code with AI-generated narration.">
+<meta property="og:url" content="https://mikestein2016.github.io/claude-elevenlabs-elearning/">
+<meta property="og:image" content="https://mikestein2016.github.io/claude-elevenlabs-elearning/assets/hero-dart.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="stylesheet" href="theme.css">
+<style>
+    .skip-link {
+        position: absolute; left: -9999px; top: 0;
+        background: var(--brand-purple-deep); color: #fff;
+        padding: 10px 16px; border-radius: 0 0 8px 0; z-index: 200;
+    }
+    .skip-link:focus { left: 0; }
+
+    .home-hero {
+        position: relative;
+        overflow: hidden;
+        background: var(--brand-gradient-hero);
+        color: #fff;
+        border-radius: var(--r-xl);
+        padding: 36px 24px 32px;
+        margin-bottom: 22px;
+    }
+    .hero-fineprint { margin: 14px 0 0; font-size: 0.85rem; color: rgba(255,255,255,0.85); }
+    .hero-plane {
+        position: absolute; right: 18px; bottom: 14px;
+        width: 130px; height: 130px; color: #fff; opacity: 0.16;
+        transform: rotate(-12deg); pointer-events: none;
+    }
+    @media (max-width: 599px) { .hero-plane { display: none; } }
+    @media (min-width: 768px) { .hero-plane { width: 180px; height: 180px; right: 36px; } }
+    .home-hero .eyebrow { background: rgba(255,255,255,0.20); color: #fff; }
+    .home-hero h1 { color: #fff; font-size: var(--step-4); margin: 8px 0 12px; line-height: 1.12; }
+    .home-hero .lede { color: rgba(255,255,255,0.96); font-size: 1.02rem; margin: 0 0 14px; max-width: 30rem; }
+    .outcome-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+    .outcome-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 0.96rem; color: #fff; line-height: 1.45; }
+    .outcome-list li::before {
+        content: ""; flex-shrink: 0; width: 20px; height: 20px; margin-top: 2px; border-radius: 50%;
+        background: rgba(255,255,255,0.22);
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>");
+        background-size: 13px 13px; background-repeat: no-repeat; background-position: center;
+    }
+
+    .section-card-cta { display: inline-flex; align-items: center; gap: 4px; font-weight: 600; color: var(--brand-purple-deep); }
+    .section-card.locked .section-card-cta { color: var(--ink-soft); }
+    .section-card.locked .section-card-hero img { filter: grayscale(0.55); opacity: 0.72; }
+    .section-card-cta svg { width: 13px; height: 13px; }
+    .section-card.locked { cursor: not-allowed; pointer-events: none; background: var(--canvas-2); border-style: dashed; }
+    /* the demo overrides the lock label below, so suppress the default "· Locked" suffix */
+    .section-card.locked .section-card-num::after { content: ""; }
+
+    /* Card hero image area. Placeholder = brand-tinted panel with a glyph;
+       drop a real/generated image in by setting a background-image (or an <img>). */
+    .section-card-hero {
+        aspect-ratio: 16 / 9; max-height: 200px; margin-bottom: 14px; border-radius: var(--r-md);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 3.1rem; line-height: 1;
+        background: var(--brand-gradient-soft); color: var(--brand-purple-deep);
+        background-size: cover; background-position: center; overflow: hidden;
+    }
+    /* tablet: 2 columns (≥560), desktop: 3 (≥980) — avoids full-width letterbox heroes */
+    @media (min-width: 560px) { .section-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 980px) { .section-grid { grid-template-columns: repeat(3, 1fr); } }
+    .section-card-hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .site-footer { margin: 28px 0 10px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; text-align: center; }
+    .site-footer a { color: var(--brand-purple-deep); font-weight: 600; }
+
+    @media (min-width: 768px) { .home-hero { padding: 52px 44px; padding-right: 220px; } .home-hero h1 { max-width: 560px; } .home-hero .lede, .home-hero .outcome-list { max-width: 34rem; } }
+
+    /* Cover topbar: Quick reference on the left (title uses the default section-label font) */
+    .topbar.has-progress .topbar-cheat { grid-column: 1; justify-self: start; }
+
+    /* ─── Search (top-right) — searches the lesson and jumps into Section 1 ─── */
+    .pa-search { grid-column: 3; grid-row: 1; justify-self: end; position: relative; }
+    .pa-search-field { display: flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 999px; background: #fff; padding: 5px 12px; transition: border-color .15s, box-shadow .15s; }
+    .pa-search-field:focus-within { border-color: var(--brand-purple); box-shadow: 0 0 0 3px var(--brand-purple-soft); }
+    .pa-search-ic { width: 15px; height: 15px; color: var(--brand-purple); flex-shrink: 0; }
+    .pa-search input { border: none; outline: none; background: transparent; font: inherit; font-size: 0.85rem; color: var(--ink); width: clamp(92px, 18vw, 180px); padding: 2px 0; }
+    .pa-search input::placeholder { color: var(--muted); }
+    .pa-search-clear { border: none; background: transparent; color: var(--muted); font-size: 1.15rem; line-height: 1; cursor: pointer; padding: 0 2px; }
+    .pa-search-results { position: absolute; right: 0; top: calc(100% + 8px); width: min(360px, 86vw); max-height: 62vh; overflow-y: auto; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); box-shadow: 0 12px 32px rgba(0,0,0,.16); z-index: 200; padding: 6px; }
+    .pa-search-item { display: block; width: 100%; text-align: left; border: none; background: transparent; border-radius: var(--r-sm); padding: 9px 11px; cursor: pointer; }
+    .pa-search-item:hover, .pa-search-item.is-active { background: var(--brand-purple-soft); }
+    .pa-search-card { display: block; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; color: var(--brand-purple); margin-bottom: 2px; }
+    .pa-search-snip { display: block; font-size: 0.85rem; line-height: 1.4; color: var(--ink-soft); }
+    .pa-search mark { background: #fde68a; color: inherit; padding: 0 1px; border-radius: 2px; }
+    .pa-search-empty { padding: 12px; font-size: 0.85rem; color: var(--muted); }
+    /* Mobile: collapse search to just the magnifier; tap to expand a full-width bar. */
+    @media (max-width: 639px) {
+        .pa-search-field { padding: 8px; cursor: pointer; }
+        .pa-search-ic { width: 17px; height: 17px; }
+        .pa-search input { display: none; }
+        .pa-search-clear { display: none; }
+        .pa-search.expanded { position: absolute; left: 8px; right: 8px; top: 0; bottom: 0; z-index: 210; display: flex; align-items: center; background: var(--surface); }
+        .pa-search.expanded .pa-search-field { flex: 1; cursor: text; padding: 8px 14px; border-color: var(--brand-purple); box-shadow: 0 0 0 3px var(--brand-purple-soft); }
+        .pa-search.expanded input { display: block; width: 100%; padding: 2px 0; }
+        .pa-search.expanded .pa-search-clear { display: block; font-size: 1.3rem; padding: 0 4px; }
+        .pa-search.expanded .pa-search-results { left: 0; right: 0; width: auto; }
+    }
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+<header class="topbar"></header>
+
+<main id="main" class="module-shell" style="max-width: 980px;">
+    <section class="home-hero">
+        <span class="eyebrow">~5 min</span>
+        <h1>Paper Aviation</h1>
+        <p class="lede">The serious professional's guide to folding a paper airplane that actually flies. By the end of Section 1 you'll be able to:</p>
+        <ul class="outcome-list">
+            <li>Fold a regulation dart from a single sheet of paper.</li>
+            <li>Achieve stable, level flight across a standard cubicle.</li>
+            <li>Diagnose a nose-dive under pressure.</li>
+        </ul>
+        <p class="hero-fineprint"><em>*No prior aviation experience required.</em></p>
+        <svg class="hero-plane" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg>
+    </section>
+
+    <h2 class="sr-only">Sections</h2>
+    <div class="section-grid" id="sectionGrid">
+        <a href="section1.html" class="section-card" data-section="section1">
+            <div class="section-card-hero"><img src="assets/hero-dart.jpg" alt="A folded paper dart airplane"></div>
+            <span class="section-card-num">Section 1</span>
+            <h3>The Dart</h3>
+            <p>The foundational aircraft. Master the folds, earn your wings, and hold your nerve through a pre-flight emergency.</p>
+            <div class="section-card-meta"><span class="section-card-cta">Start <span aria-hidden="true">&rarr;</span></span></div>
+        </a>
+        <a href="#" class="section-card" data-section="section2" data-lock="pending budget approval">
+            <div class="section-card-hero"><img src="assets/hero-standing-desk.jpg" alt="A standing desk folded entirely from paper"></div>
+            <span class="section-card-num">Section 2</span>
+            <h3>The Paper Standing Desk</h3>
+            <p>Ergonomic, height-adjustable, and structurally sound as long as no one leans on it.</p>
+            <div class="section-card-meta"><span class="section-card-cta">Start <span aria-hidden="true">&rarr;</span></span></div>
+        </a>
+        <a href="#" class="section-card" data-section="section3" data-lock="pending patent approval">
+            <div class="section-card-hero"><img src="assets/hero-3d-printer.jpg" alt="A desktop 3D printer folded entirely from paper"></div>
+            <span class="section-card-num">Section 3</span>
+            <h3>The Paper 3D Printer</h3>
+            <p>Fold a fully functional desktop 3D printer that prints exclusively more paper. Paper not included.</p>
+            <div class="section-card-meta"><span class="section-card-cta">Start <span aria-hidden="true">&rarr;</span></span></div>
+        </a>
+    </div>
+
+    <footer class="site-footer">
+        A demo build by <a href="https://www.idatlas.org" target="_blank" rel="noopener">ID Atlas</a>
+    </footer>
+</main>
+
+<script>window.Analytics = window.Analytics || { track: function(){} };</script>
+<script src="shared.js"></script>
+<script src="narration.js"></script>
+<script>
+(function () {
+    // Demo gating: Section 1 is open. Sections 2 and 3 carry a prerequisite that
+    // is never satisfied, so they stay locked forever — they exist purely as the
+    // joke teasers. No section2/3 pages exist, so the cards aren't navigable.
+    const SECTIONS = [
+        { id: 'section1', href: 'section1.html', label: 'The Dart',               prereq: null },
+        { id: 'section2', href: '#',            label: 'The Paper Standing Desk', prereq: 'demo-locked' },
+        { id: 'section3', href: '#',            label: 'The Paper 3D Printer',    prereq: 'demo-locked' }
+    ];
+    const TOTAL = SECTIONS.length;
+    const completed = LUC.progress.all();
+    const isComplete = (id) => !!completed[id];
+    const isUnlocked = (s) => !s.prereq || isComplete(s.prereq);
+    const doneCount = SECTIONS.filter(s => isComplete(s.id)).length;
+
+    const lockSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="11" width="15" height="10" rx="2"/><path d="M8 11V7.5a4 4 0 0 1 8 0V11"/></svg>';
+
+    document.querySelectorAll('.section-card').forEach(card => {
+        const section = SECTIONS.find(s => s.id === card.dataset.section);
+        const unlocked = section ? isUnlocked(section) : true;
+        if (isComplete(card.dataset.section)) card.classList.add('completed');
+        if (!unlocked) {
+            card.classList.add('locked');
+            card.setAttribute('aria-disabled', 'true');
+            card.setAttribute('tabindex', '-1');
+        }
+        const cta = card.querySelector('.section-card-cta');
+        if (!cta) return;
+        if (!unlocked) cta.innerHTML = lockSvg + ' Locked &mdash; ' + (card.dataset.lock || 'pending budget approval');
+        else cta.innerHTML = (isComplete(card.dataset.section) ? 'Review' : 'Start') + ' <span aria-hidden="true">&rarr;</span>';
+    });
+
+    LUC.partNav({
+        // Cover = the front door: shows the brand as the top-bar label (no progress dots —
+        // page mode never renders them). The deck (section1) shows its own "X of Y".
+        sectionLabel: 'Paper Aviation',
+        nextHref: 'section1.html',
+        nextLabel: 'Section 1'
+    });
+
+    // Narrate just the hero (title + description + outcomes). Single-page = container mode.
+    if (window.Narration) {
+        Narration.init({ container: document.querySelector('.home-hero'), section: 'home', clipsBase: 'audio/clips/', goto: function () {} });
+        Narration.setCard(0);
+    }
+
+    /* Cover search: index Section 1's cards (fetched) and jump straight in. */
+    function buildCoverSearch() {
+        const topbar = document.querySelector('.topbar');
+        if (!topbar || topbar.querySelector('.pa-search')) return;
+        const IC = '<svg class="pa-search-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>';
+        const wrap = document.createElement('div');
+        wrap.className = 'pa-search';
+        wrap.innerHTML = '<div class="pa-search-field">' + IC +
+            '<input type="text" autocomplete="off" spellcheck="false" placeholder="Search…" aria-label="Search Section 1" role="combobox" aria-expanded="false">' +
+            '<button type="button" class="pa-search-clear" aria-label="Clear search" hidden>&times;</button></div>' +
+            '<div class="pa-search-results" role="listbox" hidden></div>';
+        topbar.appendChild(wrap);
+        const input = wrap.querySelector('input'), results = wrap.querySelector('.pa-search-results'), clearBtn = wrap.querySelector('.pa-search-clear');
+        let index = [], current = [], active = -1, loaded = false;
+        function esc(s) { const d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; }
+        function snippet(text, q) { const at = text.toLowerCase().indexOf(q); const s = Math.max(0, at - 32), e = Math.min(text.length, at + q.length + 64); return esc((s > 0 ? '… ' : '') + text.slice(s, at)) + '<mark>' + esc(text.slice(at, at + q.length)) + '</mark>' + esc(text.slice(at + q.length, e) + (e < text.length ? ' …' : '')); }
+        fetch('section1.html').then(r => r.text()).then(htmlText => {
+            const doc = new DOMParser().parseFromString(htmlText, 'text/html');
+            doc.querySelectorAll('#sectionDeck .card-slide[data-slug]').forEach(card => {
+                const slug = card.dataset.slug;
+                const titleEl = card.querySelector('h1,h2,h3');
+                const cardTitle = titleEl ? titleEl.textContent.trim() : slug;
+                const seen = new Set();
+                card.querySelectorAll('h1,h2,h3,p,li').forEach(el => {
+                    const text = (el.textContent || '').replace(/\s+/g, ' ').trim();
+                    if (text.length < 3 || seen.has(text)) return;
+                    seen.add(text);
+                    index.push({ slug: slug, cardTitle: cardTitle, text: text, lc: text.toLowerCase() });
+                });
+            });
+            loaded = true;
+            if (input.value.trim().length >= 2) run(input.value);
+        }).catch(() => { loaded = true; });
+        function close() { results.hidden = true; results.innerHTML = ''; input.setAttribute('aria-expanded', 'false'); current = []; active = -1; }
+        function paint() { Array.from(results.querySelectorAll('.pa-search-item')).forEach((it, i) => it.classList.toggle('is-active', i === active)); }
+        function run(raw) {
+            clearBtn.hidden = raw.length === 0;
+            const q = raw.trim().toLowerCase();
+            if (q.length < 2) { close(); return; }
+            if (!loaded) { results.innerHTML = '<div class="pa-search-empty">Loading…</div>'; results.hidden = false; return; }
+            const found = [];
+            for (const e of index) { if (e.lc.indexOf(q) !== -1) { found.push(e); if (found.length > 12) break; } }
+            current = found; active = -1;
+            results.innerHTML = found.length ? found.map((e, i) => '<button type="button" class="pa-search-item" role="option" data-i="' + i + '"><span class="pa-search-card">' + esc(e.cardTitle) + '</span><span class="pa-search-snip">' + snippet(e.text, q) + '</span></button>').join('') : '<div class="pa-search-empty">No matches for “' + esc(raw.trim()) + '”</div>';
+            results.hidden = false; input.setAttribute('aria-expanded', 'true');
+        }
+        function go(i) { const e = current[i]; if (!e) return; window.location.href = 'section1.html#' + e.slug; }
+        input.addEventListener('input', () => run(input.value));
+        input.addEventListener('focus', () => { if (input.value.trim().length >= 2) run(input.value); });
+        input.addEventListener('keydown', (e) => {
+            if (results.hidden || !current.length) { if (e.key === 'Escape') { input.blur(); wrap.classList.remove('expanded'); } return; }
+            if (e.key === 'ArrowDown') { e.preventDefault(); active = Math.min(active + 1, current.length - 1); paint(); }
+            else if (e.key === 'ArrowUp') { e.preventDefault(); active = Math.max(active - 1, 0); paint(); }
+            else if (e.key === 'Enter') { e.preventDefault(); go(active >= 0 ? active : 0); }
+            else if (e.key === 'Escape') { close(); wrap.classList.remove('expanded'); }
+        });
+        results.addEventListener('click', (e) => { const it = e.target.closest('.pa-search-item'); if (it) go(parseInt(it.dataset.i, 10)); });
+        // Mobile: the field collapses to just the icon; tapping it expands a full-width
+        // search bar over the title row. Collapse on clear, Escape, or outside tap.
+        const field = wrap.querySelector('.pa-search-field');
+        const collapsible = () => window.matchMedia('(max-width: 639px)').matches;
+        field.addEventListener('click', (e) => {
+            if (collapsible() && !wrap.classList.contains('expanded') && e.target !== clearBtn) { wrap.classList.add('expanded'); input.focus(); }
+        });
+        clearBtn.addEventListener('click', () => {
+            input.value = ''; clearBtn.hidden = true; close();
+            if (collapsible() && wrap.classList.contains('expanded')) wrap.classList.remove('expanded'); else input.focus();
+        });
+        document.addEventListener('click', (e) => { if (!wrap.contains(e.target)) { close(); wrap.classList.remove('expanded'); } });
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', buildCoverSearch);
+    else buildCoverSearch();
+})();
+</script>
+
+</body>
+</html>
